@@ -32,10 +32,10 @@ public class WeatherAPILatLongTest extends TestBase {
     }
 
     /**
-     * A test method which validates response code from the response
+     * A test method which validates status code is 200 from the response
      */
     @Test(priority = 1)
-    public void validateResponseCodeTest() {
+    public void validateStatusCodeIs200Test() {
 
         rawResponse = WeatherAPIClient.executeLatLongWeatherAPI(); // Weather client executes the weather api
         jsonResponse = WeatherAPIClient.getJsonResponse(rawResponse);
@@ -47,31 +47,41 @@ public class WeatherAPILatLongTest extends TestBase {
     }
 
     /**
-     * A test method which validates count from response
+     * A test method which validates result count is 1 from response
      */
-    @Test(priority=2,dependsOnMethods ="validateResponseCodeTest" )
-    public void validatecountTest()
+    @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
+    public void validateResultsCountTest()
     {
-        String count=WeatherAPIClient.getcount(jsonResponse);
+        String count=WeatherAPIClient.getValue(jsonResponse, "count");
         Assert.assertEquals(count,properties.getProperty("count"),"API response showing incorrect count"); //Assert count
         log.info("Count =   " +count);
     }
 
     /**
-     * A test method which validates city name from response
+     * A test method which validates city name value from response
      */
-    @Test(priority=3,dependsOnMethods ="validateResponseCodeTest" )
-    public void validateCityName()
+    @Test(priority=3,dependsOnMethods = "validateStatusCodeIs200Test")
+    public void validateCityNameTest()
     {
-        String actualCityName=WeatherAPIClient.getCityName(jsonResponse);
+        String actualCityName=WeatherAPIClient.getValue(jsonResponse, "data[0].city_name");
         Assert.assertEquals(actualCityName,properties.getProperty("cityName"),"API response showing incorrect city name"); //Assert city name
         log.info("City Name = " +actualCityName);
         System.out.println("City Name = " +actualCityName);
     }
 
+    /**
+     * A test method which validates important keys are present in the response
+     */
+    @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
+    public void validateEssentialKeysTest()
+    {
+        Assert.assertTrue(rawResponse.asString().contains("app_temp"),"Feels like temperature is not present");
+        Assert.assertTrue(rawResponse.asString().contains("temp"), "Temperature not present in response");
+    }
+
 
     @AfterTest
-    public void cleaup()
+    public void cleanup()
     {
         System.out.println("Please refer Result.log for the result of execution");
 

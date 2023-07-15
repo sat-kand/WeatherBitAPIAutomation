@@ -9,6 +9,7 @@ import com.qa.Utils.Utility;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.testng.Assert;
 
 /**
  *
@@ -76,53 +77,15 @@ public class WeatherAPIClient extends TestBase {
     }
 
     /**
-     * This method fetches latitude from Json response
+     * This method fetches value of any key from Json response
      *
-     * @param jsonResponse Response in Json format
-     * @return latitude from Json response
+     * @param jsonResponse Response in Json format, key required key in string format
+     * @return key's value as string
      */
-    public static String getLatitude(JsonPath jsonResponse) {
+    public static String getValue(JsonPath jsonResponse, String key) {
 
-        String actualLatitude = Utility.getValueFromJsonResponse(jsonResponse, "lat");
-        return actualLatitude;
-
-    }
-
-    /**
-     * This method fetches longitude from Json response
-     *
-     * @param jsonResponse Response in Json format
-     * @return longitude from Json response
-     */
-    public static String getLongitude(JsonPath jsonResponse) {
-
-        String actualLongitude = Utility.getValueFromJsonResponse(jsonResponse, "lon");
-        return actualLongitude;
-    }
-
-    /**
-     * This method fetches timezone from Json response
-     *
-     * @param jsonResponse Response in Json format
-     * @return timezone from Json response
-     */
-    public static String getCityName(JsonPath jsonResponse) {
-
-        String actualCityName = Utility.getValueFromJsonResponse(jsonResponse, "data[0].city_name");
-        return actualCityName;
-    }
-
-    /**
-     * This method fetches timezone from Json response
-     *
-     * @param jsonResponse Response in Json format
-     * @return timezone from Json response
-     */
-    public static String getcount(JsonPath jsonResponse) {
-
-        String count = Utility.getValueFromJsonResponse(jsonResponse, "count");
-        return count;
-
+        String value = Utility.getValueFromJsonResponse(jsonResponse, key);
+        return value;
     }
 
 
