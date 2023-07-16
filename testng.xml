@@ -6,7 +6,7 @@
     <test
             name="Verify current Weather Data for multiple places in the world is received based on PostCode">
         <classes>
-            <class name="com.qa.test.WeatherAPITest" />
+            <class name="com.qa.test.WeatherAPIPostCodeTest" />
         </classes>
     </test>
     <test

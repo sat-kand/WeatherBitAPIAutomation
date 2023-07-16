@@ -67,6 +67,7 @@
                         </testExcludes>
                         <excludes>
                             <exclude>**/.ade_path/**</exclude>
+                            <exclude>lombok/launch/AgentLauncher.java</exclude>
                         </excludes>
                     </configuration>
                 </plugin>

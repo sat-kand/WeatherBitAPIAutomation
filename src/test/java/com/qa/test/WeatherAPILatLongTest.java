@@ -1,20 +1,18 @@
 package com.qa.test;
 
-import com.qa.APIDefinitions.WeatherAPIClient;
-import com.qa.Base.TestBase;
+import com.qa.apidefinitions.WeatherAPIClient;
+import com.qa.framework.TestBase;
+import com.qa.framework.Utility;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**
  *
- * @author Sat Kandhaswami This is a TestNG class which tests the weather
- *         client(WeatherAPIClient.java) and prints the result as per the
- *         requirement.
+ * @author Sat Kandhaswami This is a TestNG class which tests the weather bit API using coordinates
  *
  */
 public class WeatherAPILatLongTest extends TestBase {
@@ -37,9 +35,9 @@ public class WeatherAPILatLongTest extends TestBase {
     @Test(priority = 1)
     public void validateStatusCodeIs200Test() {
 
-        rawResponse = WeatherAPIClient.executeLatLongWeatherAPI(); // Weather client executes the weather api
-        jsonResponse = WeatherAPIClient.getJsonResponse(rawResponse);
-        int statusCode = WeatherAPIClient.getResponseCode(rawResponse);
+        rawResponse = WeatherAPIClient.executeWeatherAPI("current", "Coordinates"); // Weather client executes the weather api
+        jsonResponse = Utility.convertToJsonResponse(rawResponse);
+        int statusCode = Utility.getResponseCode(rawResponse);
         Assert.assertEquals(statusCode, STATUS_CODE_200, "API Execution failed.Status code is not 200"); // Assert status code
 
         log.info("Response details are as below :");
@@ -52,8 +50,8 @@ public class WeatherAPILatLongTest extends TestBase {
     @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
     public void validateResultsCountTest()
     {
-        String count=WeatherAPIClient.getValue(jsonResponse, "count");
-        Assert.assertEquals(count,properties.getProperty("count"),"API response showing incorrect count"); //Assert count
+        String count=Utility.getValue(jsonResponse, "count");
+        Assert.assertEquals(count,"1","API response showing incorrect count");
         log.info("Count =   " +count);
     }
 
@@ -63,10 +61,9 @@ public class WeatherAPILatLongTest extends TestBase {
     @Test(priority=3,dependsOnMethods = "validateStatusCodeIs200Test")
     public void validateCityNameTest()
     {
-        String actualCityName=WeatherAPIClient.getValue(jsonResponse, "data[0].city_name");
-        Assert.assertEquals(actualCityName,properties.getProperty("cityName"),"API response showing incorrect city name"); //Assert city name
+        String actualCityName=Utility.getValue(jsonResponse, "data[0].city_name");
+        Assert.assertEquals(actualCityName,properties.getProperty("cityName"),"API response showing incorrect city name");
         log.info("City Name = " +actualCityName);
-        System.out.println("City Name = " +actualCityName);
     }
 
     /**
@@ -78,13 +75,4 @@ public class WeatherAPILatLongTest extends TestBase {
         Assert.assertTrue(rawResponse.asString().contains("app_temp"),"Feels like temperature is not present");
         Assert.assertTrue(rawResponse.asString().contains("temp"), "Temperature not present in response");
     }
-
-
-    @AfterTest
-    public void cleanup()
-    {
-        System.out.println("Please refer Result.log for the result of execution");
-
-    }
-
 }
