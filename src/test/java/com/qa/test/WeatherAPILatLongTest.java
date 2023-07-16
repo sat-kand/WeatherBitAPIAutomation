@@ -33,7 +33,7 @@ public class WeatherAPILatLongTest extends TestBase {
      * A test method which validates status code is 200 from the response
      */
     @Test(priority = 1)
-    public void validateStatusCodeIs200Test() {
+    public void validateCoordinatesQueryStatusCodeIs200() {
 
         rawResponse = WeatherAPIClient.executeWeatherAPI("current", "Coordinates"); // Weather client executes the weather api
         jsonResponse = Utility.convertToJsonResponse(rawResponse);
@@ -47,8 +47,8 @@ public class WeatherAPILatLongTest extends TestBase {
     /**
      * A test method which validates result count is 1 from response
      */
-    @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
-    public void validateResultsCountTest()
+    @Test(priority=2,dependsOnMethods = "validateCoordinatesQueryStatusCodeIs200")
+    public void validateSingleResultReturnedForCoordinate()
     {
         String count=Utility.getValue(jsonResponse, "count");
         Assert.assertEquals(count,"1","API response showing incorrect count");
@@ -58,8 +58,8 @@ public class WeatherAPILatLongTest extends TestBase {
     /**
      * A test method which validates city name value from response
      */
-    @Test(priority=3,dependsOnMethods = "validateStatusCodeIs200Test")
-    public void validateCityNameTest()
+    @Test(priority=3,dependsOnMethods = "validateCoordinatesQueryStatusCodeIs200")
+    public void validateCityNameOfCoordinate()
     {
         String actualCityName=Utility.getValue(jsonResponse, "data[0].city_name");
         Assert.assertEquals(actualCityName,properties.getProperty("cityName"),"API response showing incorrect city name");
@@ -69,8 +69,8 @@ public class WeatherAPILatLongTest extends TestBase {
     /**
      * A test method which validates important keys are present in the response
      */
-    @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
-    public void validateEssentialKeysTest()
+    @Test(priority=2,dependsOnMethods = "validateCoordinatesQueryStatusCodeIs200")
+    public void validateCoordinateQueryReturnsEssentialKeys()
     {
         Assert.assertTrue(rawResponse.asString().contains("app_temp"),"Feels like temperature is not present");
         Assert.assertTrue(rawResponse.asString().contains("temp"), "Temperature not present in response");

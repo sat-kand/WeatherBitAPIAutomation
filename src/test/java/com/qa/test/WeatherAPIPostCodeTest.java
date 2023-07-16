@@ -35,7 +35,7 @@ public class WeatherAPIPostCodeTest extends TestBase {
      * A test method which validates status code is 200 from the response
      */
     @Test(priority = 1)
-    public void validateStatusCodeIs200Test() {
+    public void validatePostCodeQueryStatusIs200() {
 
         rawResponse = WeatherAPIClient.executeWeatherAPI("current","PostCode"); // Weather client executes the weather api
         jsonResponse = Utility.convertToJsonResponse(rawResponse);
@@ -49,8 +49,8 @@ public class WeatherAPIPostCodeTest extends TestBase {
     /**
      * A test method which validates important keys are present in the response
      */
-    @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
-    public void validateEssentialKeysTest()
+    @Test(priority=2,dependsOnMethods = "validatePostCodeQueryStatusIs200")
+    public void ValidatePostCodeQueryReturnEssentialKeys()
     {
         Assert.assertTrue(rawResponse.asString().contains("app_temp"),"Feels like temperature is not present");
         Assert.assertTrue(rawResponse.asString().contains("temp"), "Temperature not present in response");
@@ -59,8 +59,8 @@ public class WeatherAPIPostCodeTest extends TestBase {
     /**
      * A test method which validates city name from response
      */
-    @Test(priority=2,dependsOnMethods = "validateStatusCodeIs200Test")
-    public void validateCityNameTest()
+    @Test(priority=2,dependsOnMethods = "validatePostCodeQueryStatusIs200")
+    public void validatePostCodeCityName()
     {
         String actualCityName=Utility.getValue(jsonResponse, "data[0].city_name");
         Assert.assertEquals(actualCityName,properties.getProperty("cityName"),"API response showing incorrect city name"); //Assert city name
@@ -71,8 +71,8 @@ public class WeatherAPIPostCodeTest extends TestBase {
      * A test method which validates count from response
      */
     //BUG: Post code 2020 to return 24 records but returns only one
-    @Test(priority=3,dependsOnMethods = "validateStatusCodeIs200Test")
-    public void validateResultsCountTest()
+    @Test(priority=3,dependsOnMethods = "validatePostCodeQueryStatusIs200")
+    public void validateMultipleLocationResults()
     {
         String count=Utility.getValue(jsonResponse, "count");
         Assert.assertEquals(count,"24","API response showing incorrect count"); //Assert count
@@ -83,7 +83,7 @@ public class WeatherAPIPostCodeTest extends TestBase {
      * A test method which validates status code is 200 from the response
      */
     @Test(priority = 4)
-    public void validateIncorrectPathTest() {
+    public void IncorrectPathTest() {
 
         rawResponse = WeatherAPIClient.executeWeatherAPI("incorrect", "PostCode"); // Calling Weatherbit API with incorrect Path
         int statusCode = Utility.getResponseCode(rawResponse);
@@ -97,7 +97,7 @@ public class WeatherAPIPostCodeTest extends TestBase {
      * A test method which validates status code is 200 from the response
      */
     @Test(priority = 4)
-    public void validateIncorrectQueryTest() {
+    public void IncorrectQueryTest() {
 
         rawResponse = WeatherAPIClient.executeWeatherAPI("current", "incorrect"); // Calling Weatherbit API with incorrect query
         int statusCode = Utility.getResponseCode(rawResponse);
@@ -112,7 +112,7 @@ public class WeatherAPIPostCodeTest extends TestBase {
      */
     //BUG: Post code 0 is invalid but API returns some data instead of error
     @Test(priority = 4)
-    public void validateInvalidPostCodeTest() {
+    public void InvalidPostCodeTest() {
 
         rawResponse = WeatherAPIClient.executeWeatherAPI("current","IncorrectPostCode"); // Weather client executes the weather api
         jsonResponse = Utility.convertToJsonResponse(rawResponse);

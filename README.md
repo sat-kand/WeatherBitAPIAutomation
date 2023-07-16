@@ -25,9 +25,9 @@ git clone https://github.com/sat-kand/WeatherBitAPIAutomation.git
 mvn clean install
 ```
 
-## Reports
+## Test Reports & Artifacts:
 
-Test reports are generated automatically after each test run. The terminal will show an info like this:
+Test reports are generated automatically after each test run. The terminal will show output like this:
 ```shell
 Results :
 
@@ -52,13 +52,18 @@ The detailed reports can be found in the `/target/surefire-reports` directory. O
 - API used: https://www.weatherbit.io/api/swaggerui/weather-api-v2#/
 
 
-## Test Structure
+## Project Structure:
 
-The tests are organized using the TestNG framework. The test classes can be found in the `src/test/java/com.qa.test` directory. You can create new test classes or modify existing ones according to your requirements.
-
-
-## Continuous Integration
-
-This repository is configured to integrate with popular continuous integration (CI) systems such as Jenkins or Travis CI. You can set up a CI pipeline to automatically trigger tests on every commit or periodically based on your requirements.
+- `src/main/java/com.qa/framework/TestBase.java` : This is a super class of all classes and it loads the configuration file.
+- `src/main/java/com.qa/framework/Utility.java` : This contains various utility methods for parsing and reading the response.
+- `src/main/java/com.qa/apidefinitions/WeatherAPIClient.java` This contains methods to construct and execute the API request.
+- `src/test/java/com.qa.test`: The test classes can be found in the directory.
+- `src/main/resources`: Directory contains properties files with various paramaeters for requests and logging.
+- `testng.xml` : This is a testNG configuration file.
+- `pom.xml` : This file contains all the maven dependencies.
 
 ## Known Bugs
+
+Following test cases will fail due to the bugs in WeatherbitAPI
+1. InvalidPostcodeTest -> Some response is returned instead of error message
+2. ValidateMultipleLocationResults -> Weather data of only one place is returned eventhough the provided post code has multiple locations
